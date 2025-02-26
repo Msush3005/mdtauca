@@ -1,15 +1,21 @@
 const express = require('express');
-const { resolve } = require('path');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const menuRoutes = require('./routes/menu');
 
 const app = express();
-const port = 3010;
+const port = process.env.PORT || 3000;
 
-app.use(express.static('static'));
+app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.sendFile(resolve(__dirname, 'pages/index.html'));
-});
+const mongoURI = 'mongodb+srv://sushmithaengr23:1yHICAM9AI7B5fD7@cluster0.pybyb.mongodb.net/ecom?retryWrites=true&w=majority&appName=Cluster0';
+
+mongoose.connect(mongoURI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
+
+app.use('/menu', menuRoutes);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Server running on port http://localhost:${port}`);
 });
